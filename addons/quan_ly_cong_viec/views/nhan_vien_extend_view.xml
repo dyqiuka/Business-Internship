@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_nhan_vien_form_inherit" model="ir.ui.view">
+            <field name="name">nhan_vien.form.inherit.cong.viec</field>
+            <field name="model">nhan_vien</field>
+            <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/> 
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phong_ban_id']" position="after">
+                    <field name="so_viec_dang_lam" readonly="1" decoration-danger="so_viec_dang_lam > 3"/>
+                    <field name="diem_trung_binh" readonly="1" widget="badge" decoration-success="diem_trung_binh >= 4.0" decoration-danger="diem_trung_binh &lt; 3.0" decoration-warning="diem_trung_binh >= 3.0 and diem_trung_binh &lt; 4.0"/>
+                </xpath>
+                
+                <xpath expr="//notebook" position="inside">
+                    <page string="📋 Lịch sử &amp; Việc chờ duyệt">
+                        <field name="cong_viec_ids" readonly="0">
+                            <tree create="0" delete="0" decoration-warning="trang_thai == 'cho_duyet'" decoration-success="trang_thai == 'hoan_thanh'">
+                                <field name="name" string="Tên hạng mục" readonly="1"/>
+                                <field name="khach_hang_id" readonly="1" optional="show"/>
+                                <field name="trang_thai" readonly="1" widget="badge" decoration-warning="trang_thai == 'cho_duyet'" decoration-success="trang_thai == 'hoan_thanh'"/>
+                                <field name="diem_danh_gia" readonly="1" widget="badge" decoration-success="diem_danh_gia in ('4','5')" decoration-danger="diem_danh_gia in ('1','2')"/>
+                                <field name="nhan_xet_khach_hang" readonly="1" optional="show"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_nhan_vien_tree_inherit" model="ir.ui.view">
+            <field name="name">nhan_vien.tree.inherit.cong.viec</field>
+            <field name="model">nhan_vien</field>
+            <field name="inherit_id" ref="nhan_su.view_nhan_vien_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='trang_thai_lam_viec']" position="before">
+                    <field name="so_viec_dang_lam" string="Đang làm"/>
+                    <field name="diem_trung_binh" string="⭐ Điểm TB"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

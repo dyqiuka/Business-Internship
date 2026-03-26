@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_goi_bao_hanh_form" model="ir.ui.view">
+            <field name="name">goi_bao_hanh.form</field>
+            <field name="model">goi_bao_hanh</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="hieu_luc,het_han"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Mã bảo hành..."/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="khach_hang_id"/>
+                                <field name="loai_goi"/>
+                            </group>
+                            <group>
+                                <field name="ngay_kich_hoat"/>
+                                <field name="ngay_het_han"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_goi_bao_hanh_tree" model="ir.ui.view">
+            <field name="name">goi_bao_hanh.tree</field>
+            <field name="model">goi_bao_hanh</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="trang_thai == 'het_han'" decoration-success="trang_thai == 'hieu_luc'">
+                    <field name="name"/>
+                    <field name="khach_hang_id"/>
+                    <field name="loai_goi"/>
+                    <field name="ngay_het_han"/>
+                    <field name="trang_thai" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_goi_bao_hanh" model="ir.actions.act_window">
+            <field name="name">Sổ Bảo Hành</field>
+            <field name="res_model">goi_bao_hanh</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

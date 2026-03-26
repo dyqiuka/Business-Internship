@@ -20,16 +20,15 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-
+    # any module necessary for this one to work correctly
+    'depends': ['base', 'nhan_su'],
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'views/loai_van_ban.xml',
         'views/van_ban_den.xml',
         'views/van_ban_di.xml',
-        'views/loai_van_ban.xml',
-        'views/menu.xml',
-    ],
+        'views/menu.xml',          ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',

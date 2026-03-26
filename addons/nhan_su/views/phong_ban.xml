@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_phong_ban_form" model="ir.ui.view">
+            <field name="name">phong_ban.form</field>
+            <field name="model">phong_ban</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_nhan_vien)d" type="action" class="oe_stat_button" icon="fa-users" context="{'search_default_phong_ban_id': active_id}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value"><field name="so_luong_nhan_vien"/></span>
+                                    <span class="o_stat_text">Nhân viên</span>
+                                </div>
+                            </button>
+                            
+                            <button class="oe_stat_button" icon="fa-tasks" disabled="1">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value text-danger" attrs="{'invisible': [('tong_viec_dang_lam', '&lt;=', 10)]}">
+                                        <field name="tong_viec_dang_lam"/>
+                                    </span>
+                                    <span class="o_stat_value text-success" attrs="{'invisible': [('tong_viec_dang_lam', '&gt;', 10)]}">
+                                        <field name="tong_viec_dang_lam"/>
+                                    </span>
+                                    <span class="o_stat_text">Đang xử lý</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ten_phong_ban" placeholder="Tên phòng ban..."/>
+                            </h1>
+                        </div>
+                        <group col="4" string="Thông tin chung">
+                            <field name="ma_phong_ban"/>
+                            <field name="truong_phong_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Mô tả">
+                            <field name="mo_ta" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Nhân viên trực thuộc">
+                                <field name="nhan_vien_ids" readonly="1">
+                                    <tree decoration-success="trang_thai_lam_viec == 'san_sang'" decoration-danger="trang_thai_lam_viec == 'dang_ban'">
+                                        <field name="ma_dinh_danh"/>
+                                        <field name="ho_ten_day_du"/>
+                                        <field name="chuc_vu"/>
+                                        <field name="cap_bac" widget="badge"/>
+                                        <field name="so_viec_dang_lam" string="Đang ôm việc"/>
+                                        <field name="trang_thai_lam_viec" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_phong_ban_tree" model="ir.ui.view">
+            <field name="name">phong_ban.tree</field>
+            <field name="model">phong_ban</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ma_phong_ban"/>
+                    <field name="ten_phong_ban"/>
+                    <field name="truong_phong_id"/> 
+                    <field name="so_luong_nhan_vien"/>
+                    <field name="tong_viec_dang_lam" sum="Tổng việc toàn cty" decoration-danger="tong_viec_dang_lam > 10"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="phong_ban_search" model="ir.ui.view">
+            <field name="name">phong_ban.search</field>
+            <field name="model">phong_ban</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="ma_phong_ban"/>
+                    <field name="ten_phong_ban"/>
+                    <field name="truong_phong_id"/>
+                    
+                    </search>
+            </field>
+        </record>
+
+        <record id="action_phong_ban" model="ir.actions.act_window">
+            <field name="name">Phòng ban</field>
+            <field name="res_model">phong_ban</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

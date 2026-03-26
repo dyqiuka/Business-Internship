@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_cong_viec_search_dashboard" model="ir.ui.view">
+            <field name="name">cong_viec.search.dashboard</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <search string="Bộ lọc Báo cáo">
+                    <filter string="Nhóm theo Nhân sự" name="loc_nhan_su" context="{'group_by': 'nguoi_thuc_hien_id'}"/>
+                    <filter string="Nhóm theo Trạng thái" name="loc_trang_thai" context="{'group_by': 'trang_thai'}"/>
+                    <filter string="Nhóm theo Khách hàng" name="loc_khach_hang" context="{'group_by': 'khach_hang_id'}"/>
+                    <filter string="Nhóm theo Đánh giá (Sao)" name="loc_danh_gia" context="{'group_by': 'diem_danh_gia'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_graph_chuan" model="ir.ui.view">
+            <field name="name">cong_viec.graph.chuan</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <graph string="Biểu đồ Báo cáo" type="bar" stacked="True">
+                    <field name="trang_thai" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_pivot_chuan" model="ir.ui.view">
+            <field name="name">cong_viec.pivot.chuan</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <pivot string="Bảng Phân tích Số liệu">
+                    <field name="trang_thai" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="action_bao_cao_nhan_su" model="ir.actions.act_window">
+            <field name="name">👥 Thống kê Nhân sự &amp; Đánh giá</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="search_view_id" ref="view_cong_viec_search_dashboard"/>
+            <field name="context">{
+                'search_default_loc_nhan_su': 1, 
+                'search_default_loc_danh_gia': 1,
+                'graph_measure': '__count',
+                'pivot_measures': ['__count']
+            }</field>
+        </record>
+
+        <record id="action_bao_cao_cong_viec" model="ir.actions.act_window">
+            <field name="name">📋 Tiến độ Công việc</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="search_view_id" ref="view_cong_viec_search_dashboard"/>
+            <field name="context">{
+                'search_default_loc_trang_thai': 1,
+                'graph_measure': '__count',
+                'pivot_measures': ['__count']
+            }</field>
+        </record>
+
+        <record id="action_bao_cao_khach_hang" model="ir.actions.act_window">
+            <field name="name">🤝 Thống kê Khách hàng</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="search_view_id" ref="view_cong_viec_search_dashboard"/>
+            <field name="context">{
+                'search_default_loc_khach_hang': 1, 
+                'search_default_loc_trang_thai': 1,
+                'graph_measure': '__count',
+                'pivot_measures': ['__count']
+            }</field>
+        </record>
+
+        <record id="action_bao_cao_tien_nong" model="ir.actions.act_window">
+            <field name="name">💰 Doanh thu Dịch vụ</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="search_view_id" ref="view_cong_viec_search_dashboard"/>
+            <field name="context">{
+                'search_default_loc_nhan_su': 1,
+                'graph_measure': 'so_tien_thu',
+                'pivot_measures': ['so_tien_thu']
+            }</field>
+        </record>
+
+        <record id="action_kiem_duyet_pending" model="ir.actions.act_window">
+            <field name="name">Phiếu Cần Duyệt (Sếp)</field>
+            <field name="res_model">phieu_kiem_duyet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('ket_qua_duyet', '=', 'cho_duyet')]</field>
+        </record>
+        <record id="action_kiem_duyet_history" model="ir.actions.act_window">
+            <field name="name">Lịch Sử Kiểm Duyệt</field>
+            <field name="res_model">phieu_kiem_duyet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('ket_qua_duyet', '!=', 'cho_duyet')]</field>
+        </record>
+
+        <menuitem id="menu_cong_viec_root" name="Quản lý Công việc (AI)" sequence="20"/>
+
+        <menuitem id="menu_dashboard_tong" name="📊 DASHBOARD (Giám đốc)" parent="menu_cong_viec_root" sequence="1"/>
+            <menuitem id="menu_dash_nhan_su" name="👥 Thống kê Nhân sự" parent="menu_dashboard_tong" action="action_bao_cao_nhan_su" sequence="1"/>
+            <menuitem id="menu_dash_cong_viec" name="📋 Tiến độ Công việc" parent="menu_dashboard_tong" action="action_bao_cao_cong_viec" sequence="2"/>
+            <menuitem id="menu_dash_khach_hang" name="🤝 Thống kê Khách hàng" parent="menu_dashboard_tong" action="action_bao_cao_khach_hang" sequence="3"/>
+            <menuitem id="menu_dash_tien_nong" name="💰 Báo cáo Doanh thu" parent="menu_dashboard_tong" action="action_bao_cao_tien_nong" sequence="4"/>
+
+        <menuitem id="menu_nghiep_vu_tong" name="🛠️ NGHIỆP VỤ HÀNG NGÀY" parent="menu_cong_viec_root" sequence="2"/>
+            <menuitem id="menu_du_an" name="Dự án" parent="menu_nghiep_vu_tong" action="action_du_an" sequence="1"/>
+            <menuitem id="menu_cong_viec_ai" name="Công việc &amp; AI Báo cáo" parent="menu_nghiep_vu_tong" action="action_cong_viec" sequence="2"/>
+
+        <menuitem id="menu_kiem_duyet_parent" name="✅ QUẢN LÝ KIỂM DUYỆT" parent="menu_cong_viec_root" sequence="3"/>
+            <menuitem id="menu_kiem_duyet_pending" name="⏳ Đang chờ duyệt" parent="menu_kiem_duyet_parent" action="action_kiem_duyet_pending" sequence="1"/>
+            <menuitem id="menu_kiem_duyet_history" name="📜 Lịch sử đã duyệt" parent="menu_kiem_duyet_parent" action="action_kiem_duyet_history" sequence="2"/>
+    </data>
+</odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_danh_gia_kpi_form" model="ir.ui.view">
+            <field name="name">danh_gia_kpi.form</field>
+            <field name="model">danh_gia_kpi</field>
+            <field name="arch" type="xml">
+                <form string="Bảng Đánh giá KPI">
+                    <header>
+                        <button name="action_ai_danh_gia" 
+                                string="✨ AI Tổng hợp &amp; Đánh giá KPI" 
+                                type="object" 
+                                class="oe_highlight btn-success"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Tên Kỳ đánh giá"/>
+                            <h1><field name="name" placeholder="VD: Đánh giá KPI Tháng 03/2026"/></h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin Nhân sự">
+                                <field name="nhan_vien_id"/>
+                                <field name="ngay_danh_gia"/>
+                            </group>
+                            <group string="📊 Số liệu tự động (Từ module Kỹ thuật)">
+                                <field name="so_task_hoan_thanh" readonly="1"/>
+                                <field name="so_task_tre_han" readonly="1" decoration-danger="so_task_tre_han > 0"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="📋 Lịch sử nhận việc">
+                                <field name="chi_tiet_cong_viec" readonly="1" force_save="1"/>
+                            </page>
+                            <page string="🤖 AI Nhận Xét &amp; Đề Xuất">
+                                <div class="alert alert-info" role="alert" style="margin-bottom: 15px;">
+                                    <i class="fa fa-magic"></i> Bản đánh giá này được Giám đốc AI tổng hợp tự động từ dữ liệu làm việc thực tế của nhân viên.
+                                </div>
+                                <field name="ai_nhan_xet" widget="html"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_danh_gia_kpi_tree" model="ir.ui.view">
+            <field name="name">danh_gia_kpi.tree</field>
+            <field name="model">danh_gia_kpi</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="so_task_tre_han > 2">
+                    <field name="name"/>
+                    <field name="nhan_vien_id" widget="many2one_avatar"/>
+                    <field name="so_task_hoan_thanh" string="✅ Hoàn thành"/>
+                    <field name="so_task_tre_han" string="⚠️ Trễ hạn" decoration-danger="so_task_tre_han > 0"/>
+                    <field name="ngay_danh_gia"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_danh_gia_kpi" model="ir.actions.act_window">
+            <field name="name">Bảng Đánh giá KPI (AI)</field>
+            <field name="res_model">danh_gia_kpi</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Bấm "Tạo mới" để bắt đầu đánh giá KPI cho nhân viên bằng AI nhé!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_danh_gia_kpi_list" 
+                  name="Đánh giá KPI (AI)" 
+                  parent="menu_quan_ly_nhan_su_root" 
+                  action="action_danh_gia_kpi" 
+                  sequence="30"/>
+    </data>
+</odoo>

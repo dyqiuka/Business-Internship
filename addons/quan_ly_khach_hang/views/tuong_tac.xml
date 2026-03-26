@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tuong_tac_form" model="ir.ui.view">
+            <field name="name">tuong_tac.form</field>
+            <field name="model">tuong_tac</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_goi_ai_phan_tich" 
+                                string="✨ AI Phân tích &amp; Tạo Task" 
+                                type="object" 
+                                class="oe_highlight btn-success"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="tieu_de" class="oe_edit_only" string="Tiêu đề tương tác"/>
+                            <h1><field name="tieu_de" placeholder="VD: Khách hỏi giá dịch vụ bảo trì..."/></h1>
+                        </div>
+                        
+                        <group>
+                            <group string="👤 Thông tin khách hàng">
+                                <field name="khach_hang_id" options="{'no_create': True}"/>
+                                <field name="khach_hang_phone"/>
+                                <field name="khach_hang_email"/>
+                            </group>
+                            
+                            <group string="📞 Kênh &amp; Phân loại">
+                                <field name="ngay_tuong_tac"/>
+                                <field name="loai_tuong_tac" widget="radio"/>
+                            </group>
+                        </group>
+                        
+                        <group string="💰 Thông tin Bảo hành &amp; Thanh toán">
+                            <group>
+                                <field name="goi_bao_hanh_id" options="{'no_create': True}"/>
+                                <field name="tu_choi_bao_hanh" attrs="{'invisible': [('goi_bao_hanh_id', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="so_tien_thanh_toan" 
+                                       attrs="{'invisible': [('goi_bao_hanh_id', '!=', False), ('tu_choi_bao_hanh', '=', False)]}"
+                                       placeholder="Nhập số tiền cần thu..."/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="📝 Nội dung chi tiết">
+                                <field name="noi_dung" placeholder="Copy/Paste đoạn chat hoặc nhập nội dung ghi âm cuộc gọi vào đây để AI đọc..."/>
+                            </page>
+                            
+                            <page string="🤖 Trợ lý AI Phân tích">
+                                <group>
+                                    <group>
+                                        <field name="ai_nhan_dien_y_dinh"/>
+                                        <field name="ai_diem_cam_xuc" widget="radio" options="{'horizontal': true}"/>
+                                    </group>
+                                </group>
+                                <separator string="💡 Đề xuất &amp; Hành động"/>
+                                <field name="ai_de_xuat" readonly="1" placeholder="Bấm nút '✨ AI Phân tích' ở trên để xem đề xuất..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tuong_tac_tree" model="ir.ui.view">
+            <field name="name">tuong_tac.tree</field>
+            <field name="model">tuong_tac</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="ai_diem_cam_xuc == 'tuc_gian' or loai_tuong_tac == 'khieu_nai'" decoration-success="ai_diem_cam_xuc == 'vui'">
+                    <field name="ngay_tuong_tac"/>
+                    <field name="tieu_de"/>
+                    <field name="khach_hang_id"/>
+                    
+                    <field name="goi_bao_hanh_id" invisible="1"/>
+                    <field name="tu_choi_bao_hanh" invisible="1"/>
+                    <field name="thong_tin_thanh_toan" widget="badge" 
+                           decoration-success="goi_bao_hanh_id != False and tu_choi_bao_hanh == False" 
+                           decoration-danger="goi_bao_hanh_id != False and tu_choi_bao_hanh == True"
+                           decoration-warning="goi_bao_hanh_id == False"/>
+                           
+                    <field name="loai_tuong_tac" widget="badge" decoration-danger="loai_tuong_tac == 'khieu_nai'" decoration-info="loai_tuong_tac in ('call', 'zalo', 'facebook')"/>
+                    <field name="ai_nhan_dien_y_dinh"/>
+                    <field name="ai_diem_cam_xuc" widget="badge" decoration-danger="ai_diem_cam_xuc == 'tuc_gian'" decoration-success="ai_diem_cam_xuc == 'vui'" decoration-warning="ai_diem_cam_xuc == 'binh_thuong'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tuong_tac" model="ir.actions.act_window">
+            <field name="name">Lịch sử Tương tác &amp; Phản hồi AI</field>
+            <field name="res_model">tuong_tac</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Ghi nhận cuộc gọi/chat đầu tiên để AI phân tích nào!
+                </p>
+                <p>
+                    Nếu khách Gặp mặt, Khiếu nại hoặc Tức giận, AI sẽ tự động tạo Task khẩn cấp sang bộ phận Kỹ thuật.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

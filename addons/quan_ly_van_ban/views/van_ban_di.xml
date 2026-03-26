@@ -2,56 +2,63 @@
 <odoo>
     <data>
         <record id="view_van_ban_di_form" model="ir.ui.view">
-            <field name="name">van_ban_di</field>
+            <field name="name">van.ban.di.form.ai</field>
             <field name="model">van_ban_di</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button name="action_tom_tat_ai" type="object" string="✨ Tóm tắt bằng AI" class="oe_highlight btn-success"/>
+                    </header>
                     <sheet>
-                        <div class="oe_read_only" style="font-size:25px">Văn bản đến</div>
-                        <group col="4" string="Thông tin chung">
-                            <field name="ten_van_ban"/>
-                            <field name="so_van_ban_di"/>
-                            <field name="so_hieu_van_ban"/>
-                            <field name="noi_nhan"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ten_van_ban" placeholder="Ví dụ: Thông báo họp giao ban..."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Thông tin lưu trữ">
+                                <field name="so_van_ban_di"/>
+                                <field name="so_hieu_van_ban"/>
+                                <field name="loai_van_ban_id"/>
+                            </group>
+                            <group string="Chi tiết gửi đi">
+                                <field name="noi_nhan"/>
+                                <field name="nhan_vien_id" options="{'no_create': True}"/>
+                            </group>
                         </group>
+                        
+                        <notebook>
+                            <page string="Nội dung &amp; AI Tóm tắt">
+                                <separator string="Kết quả AI phân tích"/>
+                                <field name="ai_tom_tat" placeholder="Bấm nút 'Tóm tắt bằng AI' ở trên để AI tự động điền vào đây..."/>
+                                
+                                <separator string="Nội dung toàn văn bản (Dán vào đây)"/>
+                                <field name="noi_dung_goc" placeholder="Copy và dán toàn bộ nội dung văn bản dài cần gửi vào đây..."/>
+                            </page>
+                        </notebook>
                     </sheet>
-                    
                 </form>
             </field>
         </record>
 
         <record id="view_van_ban_di_tree" model="ir.ui.view">
-            <field name="name">van_ban_di</field>
+            <field name="name">van.ban.di.tree</field>
             <field name="model">van_ban_di</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="ten_van_ban"/>
                     <field name="so_van_ban_di"/>
-                    <field name="so_hieu_van_ban"/>
+                    <field name="ten_van_ban"/>
+                    <field name="loai_van_ban_id"/>
                     <field name="noi_nhan"/>
+                    <field name="nhan_vien_id"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="van_ban_di_search">
-            <field name="model">van_ban_di</field>
-            <field name="arch" type="xml">
-                <search>
-                    <field name="ten_van_ban"/>
-                    <field name="so_van_ban_di"/>
-                    <field name="so_hieu_van_ban"/>
-                    <field name="noi_nhan"/>
-                </search>
-            </field>
-        </record>
-
         <record id="action_van_ban_di" model="ir.actions.act_window">
-            <field name="name">Văn bản đến</field>
+            <field name="name">Văn bản đi</field>
             <field name="res_model">van_ban_di</field>
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref = "van_ban_di_search"/>
         </record>
     </data>
 </odoo>
-        
-    

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_khach_hang_root" 
+                  name="Quản lý Khách Hàng" 
+                  web_icon="fa fa-users"
+                  sequence="10"/>
+
+        <menuitem id="menu_khach_hang_list" 
+                  name="Hồ sơ Khách hàng" 
+                  parent="menu_khach_hang_root" 
+                  action="action_khach_hang"
+                  sequence="10"/>
+
+        <menuitem id="menu_goi_bao_hanh_list" 
+                  name="Sổ Bảo Hành" 
+                  parent="menu_khach_hang_root" 
+                  action="action_goi_bao_hanh"
+                  sequence="20"/>
+
+        <menuitem id="menu_tuong_tac_list" 
+                  name="Nhật ký Tương tác (AI)" 
+                  parent="menu_khach_hang_root" 
+                  action="action_tuong_tac"
+                  sequence="30"/>
+    </data>
+</odoo>

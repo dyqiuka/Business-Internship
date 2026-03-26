@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_khach_hang_form" model="ir.ui.view">
+        <field name="name">khach_hang.form</field>
+        <field name="model">khach_hang</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="trang_thai" widget="statusbar" statusbar_visible="tiem_nang,da_lien_he,dang_dam_phan,thanh_cong"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="⛔ BLACKLIST (LỪA ĐẢO)" bg_color="bg-danger" attrs="{'invisible': [('is_blacklist', '=', False)]}"/>
+                    
+                    <div class="oe_title">
+                        <label for="ten_khach_hang" class="oe_edit_only" string="Tên Khách Hàng / Doanh nghiệp"/>
+                        <h1><field name="ten_khach_hang" placeholder="VD: Anh Tuấn, Công ty ABC..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Thông tin chung">
+                            <field name="ma_khach_hang"/>
+                            <field name="loai_khach_hang"/>
+                            <field name="nguoi_phu_trach_id"/>
+                        </group>
+                        <group string="Liên hệ">
+                            <field name="so_dien_thoai"/>
+                            <field name="email"/>
+                            <field name="ngay_sinh"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Thông tin bổ sung" name="thong_tin">
+                            <group>
+                                <group string="Doanh nghiệp" attrs="{'invisible': [('loai_khach_hang', '=', 'ca_nhan')]}">
+                                    <field name="ma_so_thue"/>
+                                    <field name="website"/>
+                                </group>
+                                <group string="Địa chỉ">
+                                    <field name="dia_chi"/>
+                                </group>
+                            </group>
+                            <separator string="Ghi chú"/>
+                            <field name="ghi_chu" placeholder="Ghi chú thêm về khách hàng..."/>
+                        </page>
+                        
+                        
+                        
+                        <page string="🤖 Trợ lý AI Phân tích" name="ai_phan_tich">
+                            <button name="action_ai_phan_tich" type="object" string="✨ Kích hoạt AI Phân tích" class="oe_highlight btn-danger" style="margin-bottom: 15px; font-weight: bold; font-size: 14px;"/>
+                            
+                            <group>
+                                <field name="nhat_ky_tuong_tac" placeholder="Nhập tóm tắt cuộc gọi/chat vào đây để AI phân tích..." style="height: 100px;"/>
+                            </group>
+                            
+                            <group string="Kết quả từ Gemini AI">
+                                <field name="phan_tich_cam_xuc" widget="radio" readonly="1"/>
+                                <field name="is_blacklist" widget="boolean_toggle"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_khach_hang_tree" model="ir.ui.view">
+        <field name="name">khach_hang.tree</field>
+        <field name="model">khach_hang</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="is_blacklist == True" decoration-success="trang_thai == 'thanh_cong'" decoration-info="trang_thai == 'dang_dam_phan'">
+                <field name="ma_khach_hang"/>
+                <field name="ten_khach_hang"/>
+                <field name="so_dien_thoai"/>
+                <field name="loai_khach_hang"/>
+                <field name="nguoi_phu_trach_id"/>
+                <field name="trang_thai" widget="badge" decoration-success="trang_thai == 'thanh_cong'" decoration-info="trang_thai == 'dang_dam_phan'"/>
+                <field name="is_blacklist" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_khach_hang" model="ir.actions.act_window">
+        <field name="name">Khách Hàng</field>
+        <field name="res_model">khach_hang</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

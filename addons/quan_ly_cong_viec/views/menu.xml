@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_cong_viec_graph_pie" model="ir.ui.view">
+            <field name="name">cong_viec.graph.pie</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <graph string="Thống kê Trạng thái Công việc" type="pie">
+                    <field name="trang_thai" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_graph_bar" model="ir.ui.view">
+            <field name="name">cong_viec.graph.bar</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <graph string="Doanh thu theo Nhân viên" type="bar">
+                    <field name="nguoi_thuc_hien_id" type="row"/>
+                    <field name="so_tien_thu" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_pivot" model="ir.ui.view">
+            <field name="name">cong_viec.pivot</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <pivot string="Phân tích Doanh thu &amp; Hiệu suất">
+                    <field name="nguoi_thuc_hien_id" type="row"/>
+                    <field name="trang_thai" type="col"/>
+                    <field name="so_tien_thu" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="action_dashboard_cong_viec" model="ir.actions.act_window">
+            <field name="name">📊 Dashboard Tổng Quan</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">graph,pivot,tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Chưa có dữ liệu thống kê. Hãy tạo công việc mới!
+              </p>
+            </field>
+        </record>
+
+        <record id="action_kiem_duyet_pending" model="ir.actions.act_window">
+            <field name="name">Phiếu Cần Duyệt (Sếp)</field>
+            <field name="res_model">phieu_kiem_duyet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('ket_qua_duyet', '=', 'cho_duyet')]</field>
+            <field name="context">{'search_default_cho_duyet': 1}</field> 
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    🎉 Tuyệt vời! Hiện tại sếp không có báo cáo nào cần duyệt.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_kiem_duyet_history" model="ir.actions.act_window">
+            <field name="name">Lịch Sử Kiểm Duyệt</field>
+            <field name="res_model">phieu_kiem_duyet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('ket_qua_duyet', '!=', 'cho_duyet')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Chưa có lịch sử phê duyệt nào được ghi nhận.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_cong_viec_root" 
+                  name="Quản lý Công việc (AI)" 
+                  sequence="20"/>
+
+        
+
+        <menuitem id="menu_du_an" 
+                  name="Dự án" 
+                  parent="menu_cong_viec_root" 
+                  action="action_du_an" 
+                  sequence="10"/>
+
+        <menuitem id="menu_cong_viec_ai" 
+                  name="Công việc &amp; AI Báo cáo" 
+                  parent="menu_cong_viec_root" 
+                  action="action_cong_viec" 
+                  sequence="20"/>
+                  
+        <menuitem id="menu_kiem_duyet_parent" 
+                  name="Quản lý Kiểm Duyệt" 
+                  parent="menu_cong_viec_root" 
+                  sequence="30"/>
+
+            <menuitem id="menu_kiem_duyet_pending" 
+                      name="⏳ Đang chờ duyệt" 
+                      parent="menu_kiem_duyet_parent" 
+                      action="action_kiem_duyet_pending" 
+                      sequence="1"/>
+
+            <menuitem id="menu_kiem_duyet_history" 
+                      name="📜 Lịch sử đã duyệt" 
+                      parent="menu_kiem_duyet_parent" 
+                      action="action_kiem_duyet_history" 
+                      sequence="2"/>
+    </data>
+</odoo>

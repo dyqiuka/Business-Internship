@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_form_inherit" model="ir.ui.view">
+            <field name="name">khach_hang.form.inherit.cong.viec</field>
+            <field name="model">khach_hang</field>
+            <field name="inherit_id" ref="quan_ly_khach_hang.view_khach_hang_form"/> 
+            <field name="arch" type="xml">
+                
+                <xpath expr="//notebook" position="inside">
+                    <page string="🛠️ Lịch sử Yêu cầu &amp; Công việc">
+                        <field name="cong_viec_ids" readonly="1">
+                            <tree decoration-success="trang_thai == 'hoan_thanh'" decoration-warning="trang_thai == 'cho_duyet'">
+                                <field name="name" string="Hạng mục / Yêu cầu"/>
+                                <field name="nguoi_thuc_hien_id" string="Thợ phụ trách" widget="many2one_avatar"/>
+                                <field name="han_chot"/>
+                                <field name="trang_thai" widget="badge" 
+                                       decoration-success="trang_thai == 'hoan_thanh'" 
+                                       decoration-warning="trang_thai == 'cho_duyet'"
+                                       decoration-info="trang_thai == 'dang_lam'"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                
+            </field>
+        </record>
+    </data>
+</odoo>

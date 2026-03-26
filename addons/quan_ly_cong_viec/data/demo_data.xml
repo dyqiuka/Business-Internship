@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <record id="demo_nhan_vien_1" model="nhan_vien">
+            <field name="ho_ten_dem">Trần Văn</field>
+            <field name="ten">Thợ</field>
+            <field name="chuyen_mon">bao_tri</field>
+            <field name="trang_thai_lam_viec">san_sang</field> 
+        </record>
+
+        <record id="demo_khach_hang_1" model="khach_hang">
+            <field name="ten_khach_hang">Nguyễn Văn Hỏi Giá</field>
+            <field name="so_dien_thoai">0911222333</field>
+            <field name="loai_khach_hang">ca_nhan</field>
+        </record>
+
+        <record id="demo_khach_hang_2" model="khach_hang">
+            <field name="ten_khach_hang">Lê Thị Bức Xúc</field>
+            <field name="so_dien_thoai">0988999111</field>
+            <field name="loai_khach_hang">ca_nhan</field>
+        </record>
+
+        <record id="demo_tuong_tac_1" model="tuong_tac">
+            <field name="tieu_de">Hỏi chi phí bảo dưỡng điều hòa</field>
+            <field name="khach_hang_id" ref="demo_khach_hang_1"/>
+            <field name="loai_tuong_tac">hoi_dap</field>
+            <field name="noi_dung">Chào shop, cuối tuần này mình muốn vệ sinh 2 máy lạnh Panasonic tại nhà thì giá tổng cộng là bao nhiêu tiền vậy? Thợ qua mất khoảng bao lâu?</field>
+        </record>
+
+        <record id="demo_tuong_tac_2" model="tuong_tac">
+            <field name="tieu_de">Máy chảy nước lênh láng sau khi sửa</field>
+            <field name="khach_hang_id" ref="demo_khach_hang_2"/>
+            <field name="loai_tuong_tac">khieu_nai</field>
+            <field name="noi_dung">Làm ăn kiểu gì thế hả? Thợ của bên em vừa qua sửa thu 500k hôm qua mà nay máy lại chảy nước lênh láng ướt hết cả sàn gỗ nhà chị rồi!!! Cho người qua xử lý ngay lập tức!!!</field>
+        </record>
+
+    </data>
+</odoo>

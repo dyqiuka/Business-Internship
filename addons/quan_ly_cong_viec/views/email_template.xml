@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_moi_danh_gia" model="mail.template">
+            <field name="name">Email Mời Đánh Giá Dịch Vụ</field>
+            <field name="model_id" ref="quan_ly_cong_viec.model_cong_viec"/> 
+            <field name="subject">Mời đánh giá dịch vụ sửa chữa: {{ object.name }}</field>
+            <field name="email_to">{{ object.khach_hang_id.email }}</field>
+            
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #2e6c80;">Cảm ơn quý khách đã sử dụng dịch vụ!</h2>
+                    
+                    <p>Xin chào <b t-out="object.khach_hang_id.ten_khach_hang or 'Quý khách'"/>,</p>
+                    <p>Hệ thống ghi nhận sự cố của quý khách đã được xử lý xong. Dưới đây là thông tin chi tiết:</p>
+                    
+                    <ul style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+                        <li><b>Hạng mục:</b> <t t-out="object.name"/></li>
+                        <li><b>Kỹ thuật viên xử lý:</b> <t t-out="object.nguoi_thuc_hien_id.ho_ten_day_du"/></li>
+                        <li><b>Chi phí thanh toán:</b> <t t-out="object.so_tien_thu"/> VNĐ</li>
+                    </ul>
+
+                    <p>Để giúp chúng tôi cải thiện chất lượng, quý khách vui lòng chấm điểm cho kỹ thuật viên bằng cách <b>click vào 1 trong các mức giá dưới đây:</b></p>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a t-attf-href="/danh-gia-dich-vu/{{ object.id }}/5" style="padding: 10px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 3px; display: inline-block;">⭐⭐⭐⭐⭐ Tuyệt vời</a>
+                        <br/><br/><br/>
+                        <a t-attf-href="/danh-gia-dich-vu/{{ object.id }}/4" style="padding: 10px 15px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 3px; display: inline-block;">⭐⭐⭐⭐ Tốt</a>
+                        <a t-attf-href="/danh-gia-dich-vu/{{ object.id }}/3" style="padding: 10px 15px; background-color: #ffc107; color: black; text-decoration: none; border-radius: 3px; display: inline-block;">⭐⭐⭐ Bình thường</a>
+                        <br/><br/><br/>
+                        <a t-attf-href="/danh-gia-dich-vu/{{ object.id }}/2" style="padding: 10px 15px; background-color: #ffc107; color: black; text-decoration: none; border-radius: 3px; display: inline-block;">⭐⭐ Kém</a>
+                        <br/><br/><br/>
+                        <a t-attf-href="/danh-gia-dich-vu/{{ object.id }}/1" style="padding: 10px 15px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 3px; display: inline-block;">⭐ Rất tệ</a>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_du_an_form" model="ir.ui.view">
+            <field name="name">du_an.form</field>
+            <field name="model">du_an</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="khoi_tao,dang_trien_khai,hoan_thanh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="ten_du_an" class="oe_edit_only" string="Tên Dự án"/>
+                            <h1><field name="ten_du_an" placeholder="VD: Triển khai hệ thống phần mềm..."/></h1>
+                        </div>
+                        <group>
+                            <group string="Thông tin chung">
+                                <field name="ma_du_an"/>
+                                <field name="khach_hang_id"/>
+                                <field name="nguoi_quan_ly_id"/>
+                            </group>
+                            <group string="Tiến độ &amp; Ngân sách">
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                                <field name="ngan_sach"/>
+                                
+                                <label for="tien_do_phan_tram" string="Tiến độ dự án"/>
+                                <div>
+                                    <field name="tien_do_phan_tram" widget="progressbar"/>
+                                </div>
+                                
+                                <label for="viec_hoan_thanh" string="Tỉ lệ việc xong"/>
+                                <div>
+                                    <field name="viec_hoan_thanh" class="oe_inline"/> / <field name="tong_cong_viec" class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Danh sách Công việc">
+                                <field name="cong_viec_ids" readonly="1">
+                                    <tree decoration-success="trang_thai=='hoan_thanh'" decoration-info="trang_thai=='dang_lam'">
+                                        <field name="name" string="Tên hạng mục"/>
+                                        <field name="nguoi_thuc_hien_id"/>
+                                        <field name="han_chot"/>
+                                        <field name="trang_thai" widget="badge" decoration-success="trang_thai=='hoan_thanh'" decoration-info="trang_thai=='dang_lam'"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Mô tả dự án">
+                                <field name="mo_ta" placeholder="Mô tả chi tiết mục tiêu của dự án này..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_du_an_tree" model="ir.ui.view">
+            <field name="name">du_an.tree</field>
+            <field name="model">du_an</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="trang_thai == 'dang_trien_khai'" decoration-success="trang_thai == 'hoan_thanh'" decoration-warning="trang_thai == 'tam_dung'">
+                    <field name="ma_du_an"/>
+                    <field name="ten_du_an"/>
+                    <field name="khach_hang_id"/>
+                    <field name="nguoi_quan_ly_id"/>
+                    <field name="ngay_ket_thuc"/>
+                    
+                    <field name="tien_do_phan_tram" widget="progressbar" string="Tiến độ"/>
+                    
+                    <field name="trang_thai" widget="badge" decoration-info="trang_thai == 'dang_trien_khai'" decoration-success="trang_thai == 'hoan_thanh'" decoration-warning="trang_thai == 'tam_dung'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_du_an" model="ir.actions.act_window">
+            <field name="name">Dự án</field>
+            <field name="res_model">du_an</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo dự án đầu tiên của bạn tại đây nhé!
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

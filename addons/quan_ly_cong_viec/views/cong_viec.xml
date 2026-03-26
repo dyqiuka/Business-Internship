@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_cong_viec_form" model="ir.ui.view">
+            <field name="name">cong_viec.form</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        
+                        <button name="action_ai_tim_tho" 
+                                string="🤖 AI Phân Việc Tự Động" 
+                                type="object" 
+                                class="btn-primary"
+                                attrs="{'invisible': [('nguoi_thuc_hien_id', '!=', False)]}"/>
+                        
+                        <button name="action_ai_viet_bao_cao" 
+                                string="✨ AI Viết Báo cáo Nghiệm thu" 
+                                type="object" 
+                                class="oe_highlight btn-success"
+                                attrs="{'invisible': [('trang_thai', 'in', ['cho_duyet', 'hoan_thanh'])]}"/>
+                                
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="moi,dang_lam,cho_duyet,hoan_thanh" options="{'clickable': '1'}"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Tên Công việc / Hạng mục"/>
+                            <h1><field name="name" placeholder="VD: Khẩn cấp - Sửa lỗi điều hòa..."/></h1>
+                        </div>
+                        <group>
+                            <group string="Phân công nhiệm vụ">
+                                <field name="du_an_id"/>
+                                <field name="nguoi_thuc_hien_id"/>
+                                <field name="khach_hang_id"/>
+                            </group>
+                            <group string="Tiến độ &amp; Ưu tiên">
+                                <field name="han_chot"/>
+                                <field name="do_uu_tien" widget="priority"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="🛡️ Bảo hành &amp; Thanh toán">
+                                <field name="goi_bao_hanh_id" options="{'no_create': True}"/>
+                                <field name="so_tien_thu" attrs="{'invisible': [('goi_bao_hanh_id', '!=', False)]}" placeholder="Nhập số tiền VNĐ..."/>
+                            </group>
+                            
+                            <group string="🌟 Khách hàng Đánh giá" invisible="1">
+                                <field name="diem_danh_gia"/>
+                                <field name="nhan_xet_khach_hang"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="⚠️ Yêu cầu từ Khách Hàng">
+                                <field name="mo_ta_loi" placeholder="Dữ liệu do module Phản hồi / Tương tác tự động đẩy sang đây..."/>
+                            </page>
+                            
+                            <page string="📝 Ghi chú nhân viên">
+                                <group>
+                                    <field name="ghi_chu_tho" 
+                                           nolabel="1" 
+                                           placeholder="Nhân viên ghi chú tại đây: Đã thay linh kiện gì? Tình trạng máy sau sửa ntn? (Dữ liệu này sẽ dùng để AI viết báo cáo)"/>
+                                </group>
+                            </page>
+                            
+                            <page string="📜 Lịch sử Kiểm duyệt">
+                                <field name="phieu_duyet_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="nguoi_duyet_id"/>
+                                        <field name="nhan_xet_cua_sep"/>
+                                        <field name="ket_qua_duyet" widget="badge" 
+                                               decoration-warning="ket_qua_duyet == 'cho_duyet'" 
+                                               decoration-success="ket_qua_duyet == 'dong_y'" 
+                                               decoration-danger="ket_qua_duyet == 'tu_choi'"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_tree" model="ir.ui.view">
+            <field name="name">cong_viec.tree</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="han_chot &lt; current_date and trang_thai not in ('cho_duyet', 'hoan_thanh')" decoration-success="trang_thai == 'hoan_thanh'">
+                    <field name="name"/>
+                    <field name="du_an_id" optional="show"/>
+                    <field name="khach_hang_id" optional="show"/>
+                    <field name="nguoi_thuc_hien_id" widget="many2one_avatar"/>
+                    <field name="han_chot" widget="remaining_days"/>
+                    <field name="do_uu_tien" widget="priority" optional="show"/>
+                    <field name="trang_thai" widget="badge" 
+                           decoration-info="trang_thai == 'dang_lam'" 
+                           decoration-success="trang_thai == 'hoan_thanh'" 
+                           decoration-warning="trang_thai == 'cho_duyet'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_kanban" model="ir.ui.view">
+            <field name="name">cong_viec.kanban</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trang_thai" class="o_kanban_small_column" sample="1">
+                    <field name="name"/>
+                    <field name="nguoi_thuc_hien_id"/>
+                    <field name="do_uu_tien"/>
+                    <field name="trang_thai"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="do_uu_tien" widget="priority"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="nguoi_thuc_hien_id" widget="many2one_avatar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_cong_viec_search" model="ir.ui.view">
+            <field name="name">cong_viec.search</field>
+            <field name="model">cong_viec</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm Công việc">
+                    <field name="name" string="Tên công việc"/>
+                    <field name="nguoi_thuc_hien_id"/>
+                    <field name="khach_hang_id"/>
+                    <separator/>
+                    <filter string="Chưa hoàn thành" name="not_done" domain="[('trang_thai', '!=', 'hoan_thanh')]"/>
+                    <filter string="Đã hoàn thành" name="done" domain="[('trang_thai', '=', 'hoan_thanh')]"/>
+                    <filter string="Trễ hạn" name="late" domain="[('han_chot', '&lt;', context_today().strftime('%Y-%m-%d')), ('trang_thai', '!=', 'hoan_thanh')]"/>
+                    <group expand="0" string="Gộp nhóm theo">
+                        <filter string="Người thực hiện" name="group_assignee" context="{'group_by': 'nguoi_thuc_hien_id'}"/>
+                        <filter string="Trạng thái" name="group_state" context="{'group_by': 'trang_thai'}"/>
+                        <filter string="Khách hàng" name="group_customer" context="{'group_by': 'khach_hang_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_cong_viec" model="ir.actions.act_window">
+            <field name="name">Công việc &amp; AI</field>
+            <field name="res_model">cong_viec</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Chưa có công việc nào. Đợi AI tự động tạo từ module Khách hàng nhé!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
